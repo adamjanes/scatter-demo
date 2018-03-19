@@ -57,15 +57,13 @@ var data1 = [
 
 var svg = d3.select("#canvas");
 
+// Margin setup
 var margin = {top: 10, right: 10, bottom: 50, left: 50};
 var width = +svg.attr("width") - margin.left - margin.right;
 var height = +svg.attr("height") - margin.top - margin.bottom;
     
 var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// Standard transition for our visualization
-var t = d3.transition().duration(750);
 
 // Scales
 var x = d3.scaleLinear()
@@ -113,6 +111,9 @@ d3.interval(function(){
 update(data0);
 
 function update(data){
+    // Standard transition for our visualization
+    var t = d3.transition().duration(750);
+
     // Update our scales
     x.domain([d3.min(data, function(d){ return d.gpa; }) / 1.05, 
         d3.max(data, function(d){ return d.gpa; }) * 1.05])
