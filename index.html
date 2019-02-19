@@ -119,27 +119,36 @@ function update(data){
         d3.max(data, function(d){ return d.gpa; }) * 1.05])
     y.domain([d3.min(data, function(d){ return d.height; }) / 1.05,
         d3.max(data, function(d){ return d.height; }) * 1.05])
-
+    
+    var t = d3.transition().duration(750);
+    
     // Update our axes
-    xAxis.call(xAxisCall);
-    yAxis.call(yAxisCall);
+    xAxis.transition(t).call(xAxisCall);
+    yAxis.transition(t).call(yAxisCall);
 
     // Update our circles
     var circles = g.selectAll("circle")
         .data(data);
 
-    circles.exit().remove()
+    circles.exit().transition(t)
+        .attr("fill-opacity", 0.1)
+        .attr("cy", y(0))
+        .remove()
 
-    circles
+    circles.transition(t)
         .attr("cx", function(d){ return x(d.gpa) })
         .attr("cy", function(d){ return y(d.height) })
 
     circles.enter()
         .append("circle")
             .attr("cx", function(d){ return x(d.gpa) })
-            .attr("cy", function(d){ return y(d.height) })
+            .attr("cy", y(0))
             .attr("r", 5)
-            .attr("fill", "grey");
+            .attr("fill", "grey")
+            .attr("fill-opacity", 0.1)
+            .transition(t)
+            .attr("fill-opacity", 1)
+            .attr("cy", function(d){ return y(d.height) });
 }
 
 
